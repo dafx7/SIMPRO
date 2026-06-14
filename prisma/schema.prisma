@@ -1,0 +1,172 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String  @id @default(uuid())
+  email        String  @unique
+  passwordHash String
+  fullName     String
+  role         Role    @default(MAHASISWA)
+
+  // MAHASISWA only
+  nim      String? @unique
+  jurusan  String?
+  semester Int?
+  angkatan Int?
+
+  // DOSEN only
+  nidn      String? @unique
+  expertise String?
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  submittedProposals    Proposal[]           @relation("Submitter")
+  supervisedProposals   Proposal[]           @relation("Pembimbing")
+  assignments           ReviewerAssignment[]
+  sentNotifications     Notification[]       @relation("Sender")
+  receivedNotifications Notification[]       @relation("Receiver")
+  auditLogs             AuditLog[]
+}
+
+enum Role {
+  ADMIN
+  DOSEN
+  MAHASISWA
+}
+
+model Proposal {
+  id             String         @id @default(uuid())
+  title          String
+  abstract       String         @db.Text
+  jurusan        String
+  status         ProposalStatus @default(DRAFT)
+  documentPath   String?
+  documentName   String?
+  submitterId    String
+  submitter      User           @relation("Submitter", fields: [submitterId], references: [id])
+  pembimbingId   String?
+  pembimbing     User?          @relation("Pembimbing", fields: [pembimbingId], references: [id])
+  submissionDate DateTime?
+  reviewDeadline DateTime?
+  similarityScore Float?
+  similarityFlag  Boolean       @default(false)
+  adminNotes     String?        @db.Text
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  assignments   ReviewerAssignment[]
+  statusHistory StatusHistory[]
+  notifications Notification[]
+  auditLogs     AuditLog[]
+}
+
+enum ProposalStatus {
+  DRAFT
+  SUBMITTED
+  UNDER_REVIEW
+  REVISION
+  APPROVED
+  REJECTED
+}
+
+model ReviewerAssignment {
+  id         String           @id @default(uuid())
+  proposalId String
+  proposal   Proposal         @relation(fields: [proposalId], references: [id])
+  pengujiId  String
+  penguji    User             @relation(fields: [pengujiId], references: [id])
+  assignedAt          DateTime         @default(now())
+  status              AssignmentStatus @default(ASSIGNED)
+  recommendationScore Float?
+  reviewForm          ReviewForm?
+
+  @@unique([proposalId, pengujiId])
+}
+
+enum AssignmentStatus {
+  ASSIGNED
+  IN_PROGRESS
+  COMPLETED
+  DECLINED
+}
+
+model ReviewForm {
+  id               String               @id @default(uuid())
+  assignmentId     String               @unique
+  assignment       ReviewerAssignment   @relation(fields: [assignmentId], references: [id])
+  originalityScore Int
+  methodologyScore Int
+  feasibilityScore Int
+  relevanceScore   Int
+  comments         String               @db.Text
+  recommendation   ReviewRecommendation
+  submittedAt      DateTime             @default(now())
+}
+
+enum ReviewRecommendation {
+  APPROVE
+  REVISE
+  REJECT
+}
+
+model StatusHistory {
+  id         String          @id @default(uuid())
+  proposalId String
+  proposal   Proposal        @relation(fields: [proposalId], references: [id])
+  fromStatus ProposalStatus?
+  toStatus   ProposalStatus
+  changedBy  String
+  notes      String?
+  createdAt  DateTime        @default(now())
+}
+
+model Notification {
+  id         String           @id @default(uuid())
+  receiverId String
+  receiver   User             @relation("Receiver", fields: [receiverId], references: [id])
+  senderId   String?
+  sender     User?            @relation("Sender", fields: [senderId], references: [id])
+  proposalId String?
+  proposal   Proposal?        @relation(fields: [proposalId], references: [id])
+  type       NotificationType
+  title      String
+  message    String           @db.Text
+  isRead     Boolean          @default(false)
+  createdAt  DateTime         @default(now())
+}
+
+enum NotificationType {
+  STATUS_CHANGE
+  DEADLINE_REMINDER
+  ASSIGNMENT
+  REVIEW_SUBMITTED
+  DECISION_MADE
+}
+
+model AuditLog {
+  id         String    @id @default(uuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id])
+  proposalId String?
+  proposal   Proposal? @relation(fields: [proposalId], references: [id])
+  action     String
+  entityType String
+  entityId   String
+  oldValue   Json?
+  newValue   Json?
+  createdAt  DateTime  @default(now())
+}
+
+model Jurusan {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+}

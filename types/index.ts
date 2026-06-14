@@ -1,4 +1,4 @@
-export type Role = 'DOSEN' | 'REVIEWER' | 'ADMIN'
+export type Role = 'ADMIN' | 'DOSEN' | 'MAHASISWA'
 
 export type ProposalStatus =
   | 'DRAFT'
@@ -24,6 +24,8 @@ export interface UserSession {
   email: string
   fullName: string
   role: Role
+  nim?: string | null
+  jurusan?: string | null
   image?: string | null
 }
 
@@ -31,11 +33,12 @@ export interface ProposalWithDetails {
   id: string
   title: string
   abstract: string
-  researchField: string
+  jurusan: string
   status: ProposalStatus
   documentPath?: string | null
   documentName?: string | null
   submitterId: string
+  pembimbingId?: string | null
   submissionDate?: Date | null
   reviewDeadline?: Date | null
   similarityScore?: number | null
@@ -47,7 +50,18 @@ export interface ProposalWithDetails {
     id: string
     fullName: string
     email: string
+    nim?: string | null
+    jurusan?: string | null
+    semester?: number | null
+    angkatan?: number | null
   }
+  pembimbing?: {
+    id: string
+    fullName: string
+    email: string
+    nidn?: string | null
+    expertise?: string | null
+  } | null
   assignments: AssignmentWithReview[]
   statusHistory: StatusHistoryEntry[]
 }
@@ -55,14 +69,14 @@ export interface ProposalWithDetails {
 export interface AssignmentWithReview {
   id: string
   proposalId: string
-  reviewerId: string
+  pengujiId: string
   assignedAt: Date
   status: AssignmentStatus
-  recommendationScore?: number | null
-  reviewer: {
+  penguji: {
     id: string
     fullName: string
     email: string
+    nidn?: string | null
     expertise?: string | null
   }
   reviewForm?: ReviewFormData | null
@@ -100,13 +114,8 @@ export interface NotificationData {
   message: string
   isRead: boolean
   createdAt: Date
-  sender?: {
-    fullName: string
-    email: string
-  } | null
-  proposal?: {
-    title: string
-  } | null
+  sender?: { fullName: string; email: string } | null
+  proposal?: { title: string } | null
 }
 
 export interface DashboardStats {
@@ -119,19 +128,13 @@ export interface DashboardStats {
   draft: number
 }
 
-export interface ReviewerDashboardStats {
-  assigned: number
-  completed: number
-  pending: number
-}
-
 export interface PaginationParams {
   page: number
   limit: number
   search?: string
   status?: ProposalStatus
   role?: Role
-  field?: string
+  jurusan?: string
   startDate?: string
   endDate?: string
 }
