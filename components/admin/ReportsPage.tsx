@@ -63,12 +63,12 @@ const statusLabels: Record<string, string> = {
 }
 
 const statusColors: Record<string, string> = {
-  DRAFT: '#9ca3af',
-  SUBMITTED: '#3b82f6',
-  UNDER_REVIEW: '#f59e0b',
-  REVISION: '#f97316',
-  APPROVED: '#22c55e',
-  REJECTED: '#ef4444',
+  DRAFT: '#94A3B8',
+  SUBMITTED: '#4D8C85',
+  UNDER_REVIEW: '#BD8527',
+  REVISION: '#EA8C3A',
+  APPROVED: '#2D9D6F',
+  REJECTED: '#DC4545',
 }
 
 export default function ReportsPage() {
@@ -239,14 +239,14 @@ export default function ReportsPage() {
         </div>
       </div>
 
-      <div className="flex gap-3 mb-4 p-4 bg-gray-50 rounded-lg">
+      <div className="flex gap-3 mb-4 p-4 bg-wbi-cream rounded-2xl">
         <div>
           <Label className="text-xs">Dari Tanggal</Label>
           <input
             type="date"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
-            className="block border rounded px-2 py-1 text-sm mt-1"
+            className="block border border-input rounded-xl px-2 py-1 text-sm mt-1 focus:outline-none focus:ring-3 focus:ring-wbi-teal/30 focus:border-wbi-teal"
           />
         </div>
         <div>
@@ -255,11 +255,11 @@ export default function ReportsPage() {
             type="date"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
-            className="block border rounded px-2 py-1 text-sm mt-1"
+            className="block border border-input rounded-xl px-2 py-1 text-sm mt-1 focus:outline-none focus:ring-3 focus:ring-wbi-teal/30 focus:border-wbi-teal"
           />
         </div>
         <div className="flex items-end">
-          <Button size="sm" onClick={fetchReport} className="bg-blue-800 hover:bg-blue-900">
+          <Button size="sm" variant="gradient" onClick={fetchReport}>
             Filter
           </Button>
         </div>
@@ -282,7 +282,7 @@ export default function ReportsPage() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <Card>
                 <CardContent className="p-4 text-center">
-                  <p className="text-3xl font-bold text-blue-700">{reportData.summary.total}</p>
+                  <p className="text-3xl font-bold font-heading text-wbi-forest">{reportData.summary.total}</p>
                   <p className="text-xs text-gray-500 mt-1">Total Proposal</p>
                 </CardContent>
               </Card>

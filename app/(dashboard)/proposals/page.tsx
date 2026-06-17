@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { PlusCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import ProposalTable from '@/components/proposals/ProposalTable'
+import WelcomeBanner from '@/components/dashboard/WelcomeBanner'
 
 export default async function ProposalsPage() {
   const session = await auth()
@@ -17,26 +18,28 @@ export default async function ProposalsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">
-            {isMahasiswa ? 'Proposal TA Saya' : 'Proposal Bimbingan & Pengujian'}
-          </h1>
-          <p className="text-gray-500 mt-1">
-            {isMahasiswa
-              ? 'Daftar proposal Tugas Akhir yang telah Anda ajukan'
-              : 'Daftar proposal TA yang Anda bimbing atau uji'}
-          </p>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="flex-1 w-full">
+          <WelcomeBanner
+            title={isMahasiswa ? 'Proposal TA Saya' : 'Proposal Bimbingan & Pengujian'}
+            subtitle={
+              isMahasiswa
+                ? 'Daftar proposal Tugas Akhir yang telah Anda ajukan'
+                : 'Daftar proposal TA yang Anda bimbing atau uji'
+            }
+          />
         </div>
-        {isMahasiswa && (
+      </div>
+      {isMahasiswa && (
+        <div className="flex justify-end">
           <Link href="/proposals/new">
-            <Button className="bg-blue-800 hover:bg-blue-900">
+            <Button variant="gradient">
               <PlusCircle className="mr-2 h-4 w-4" />
               Proposal Baru
             </Button>
           </Link>
-        )}
-      </div>
+        </div>
+      )}
       <ProposalTable />
     </div>
   )

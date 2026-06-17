@@ -28,46 +28,61 @@ interface NavItem {
 interface SidebarProps {
   role: string
   unreadCount?: number
+  userName?: string
 }
 
-export default function Sidebar({ role, unreadCount = 0 }: SidebarProps) {
+const roleLabels: Record<string, string> = {
+  ADMIN: 'Kaprodi / Admin',
+  DOSEN: 'Dosen',
+  MAHASISWA: 'Mahasiswa',
+}
+
+export default function Sidebar({ role, unreadCount = 0, userName }: SidebarProps) {
   const pathname = usePathname()
 
   const mahasiswaNav: NavItem[] = [
-    { href: '/dashboard', label: 'Dashboard', icon: <LayoutDashboard className="w-4 h-4" /> },
-    { href: '/proposals', label: 'Proposal TA Saya', icon: <FileText className="w-4 h-4" /> },
-    { href: '/proposals/new', label: 'Ajukan Proposal Baru', icon: <PlusCircle className="w-4 h-4" /> },
-    { href: '/notifications', label: 'Notifikasi', icon: <Bell className="w-4 h-4" />, badge: unreadCount },
+    { href: '/dashboard', label: 'Dashboard', icon: <LayoutDashboard className="w-[20px] h-[20px]" /> },
+    { href: '/proposals', label: 'Proposal TA Saya', icon: <FileText className="w-[20px] h-[20px]" /> },
+    { href: '/proposals/new', label: 'Ajukan Proposal Baru', icon: <PlusCircle className="w-[20px] h-[20px]" /> },
+    { href: '/notifications', label: 'Notifikasi', icon: <Bell className="w-[20px] h-[20px]" />, badge: unreadCount },
   ]
 
   const dosenNav: NavItem[] = [
-    { href: '/dashboard', label: 'Dashboard', icon: <LayoutDashboard className="w-4 h-4" /> },
-    { href: '/proposals', label: 'Proposal Bimbingan & Ujian', icon: <FileText className="w-4 h-4" /> },
-    { href: '/reviews', label: 'Penilaian Proposal', icon: <ClipboardList className="w-4 h-4" /> },
-    { href: '/notifications', label: 'Notifikasi', icon: <Bell className="w-4 h-4" />, badge: unreadCount },
+    { href: '/dashboard', label: 'Dashboard', icon: <LayoutDashboard className="w-[20px] h-[20px]" /> },
+    { href: '/proposals', label: 'Proposal Bimbingan & Ujian', icon: <FileText className="w-[20px] h-[20px]" /> },
+    { href: '/reviews', label: 'Penilaian Proposal', icon: <ClipboardList className="w-[20px] h-[20px]" /> },
+    { href: '/notifications', label: 'Notifikasi', icon: <Bell className="w-[20px] h-[20px]" />, badge: unreadCount },
   ]
 
   const adminNav: NavItem[] = [
-    { href: '/dashboard', label: 'Dashboard', icon: <LayoutDashboard className="w-4 h-4" /> },
-    { href: '/admin/proposals', label: 'Semua Proposal TA', icon: <FileText className="w-4 h-4" /> },
-    { href: '/admin/users', label: 'Kelola Pengguna', icon: <Users className="w-4 h-4" /> },
-    { href: '/admin/reports', label: 'Laporan & Statistik', icon: <BarChart3 className="w-4 h-4" /> },
-    { href: '/notifications', label: 'Notifikasi', icon: <Bell className="w-4 h-4" />, badge: unreadCount },
+    { href: '/dashboard', label: 'Dashboard', icon: <LayoutDashboard className="w-[20px] h-[20px]" /> },
+    { href: '/admin/proposals', label: 'Semua Proposal TA', icon: <FileText className="w-[20px] h-[20px]" /> },
+    { href: '/admin/users', label: 'Kelola Pengguna', icon: <Users className="w-[20px] h-[20px]" /> },
+    { href: '/admin/reports', label: 'Laporan & Statistik', icon: <BarChart3 className="w-[20px] h-[20px]" /> },
+    { href: '/notifications', label: 'Notifikasi', icon: <Bell className="w-[20px] h-[20px]" />, badge: unreadCount },
   ]
 
   const navItems =
     role === 'ADMIN' ? adminNav : role === 'DOSEN' ? dosenNav : mahasiswaNav
 
+  const initials = (userName || '')
+    .split(' ')
+    .slice(0, 2)
+    .map((n) => n[0])
+    .join('')
+    .toUpperCase()
+
   return (
-    <aside className="w-64 min-h-screen bg-blue-900 text-white flex flex-col">
-      <div className="p-6 border-b border-blue-800">
+    <aside className="w-64 min-h-screen bg-wbi-forest text-white flex flex-col">
+      <div className="p-6 border-b border-white/10">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 bg-white rounded-lg flex items-center justify-center">
-            <GraduationCap className="w-5 h-5 text-blue-900" />
+          <div className="relative w-9 h-9 bg-white rounded-xl flex items-center justify-center shrink-0">
+            <GraduationCap className="w-5 h-5 text-wbi-forest" />
+            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-wbi-gold ring-2 ring-wbi-forest" />
           </div>
           <div>
-            <div className="font-bold text-sm">SIMPRO</div>
-            <div className="text-xs text-blue-300">Politeknik Wilmar</div>
+            <div className="font-heading font-bold text-sm tracking-tight">SIMPRO</div>
+            <div className="text-xs text-white/50">Politeknik Wilmar</div>
           </div>
         </div>
       </div>
@@ -80,16 +95,19 @@ export default function Sidebar({ role, unreadCount = 0 }: SidebarProps) {
               key={item.href}
               href={item.href}
               className={cn(
-                'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors',
+                'relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all duration-200',
                 isActive
-                  ? 'bg-blue-700 text-white'
-                  : 'text-blue-200 hover:bg-blue-800 hover:text-white'
+                  ? 'bg-wbi-teal text-white font-medium shadow-sm'
+                  : 'text-white/70 hover:bg-white/10 hover:text-white'
               )}
             >
+              {isActive && (
+                <span className="absolute left-0 top-1.5 bottom-1.5 w-1 rounded-full bg-wbi-gold" />
+              )}
               {item.icon}
               <span className="flex-1">{item.label}</span>
               {item.badge !== undefined && item.badge > 0 && (
-                <Badge className="bg-red-500 text-white text-xs px-1.5 py-0.5 min-w-[20px] text-center">
+                <Badge className="bg-wbi-gold text-wbi-forest text-xs px-1.5 py-0.5 min-w-[20px] text-center font-semibold">
                   {item.badge > 99 ? '99+' : item.badge}
                 </Badge>
               )}
@@ -98,10 +116,21 @@ export default function Sidebar({ role, unreadCount = 0 }: SidebarProps) {
         })}
       </nav>
 
-      <div className="p-4 border-t border-blue-800">
+      <div className="p-4 border-t border-white/10 space-y-3">
+        {userName && (
+          <div className="flex items-center gap-3 px-2">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-wbi-teal text-xs font-semibold text-white">
+              {initials || 'U'}
+            </div>
+            <div className="min-w-0">
+              <p className="truncate text-sm font-medium text-white">{userName}</p>
+              <p className="text-xs text-white/50">{roleLabels[role] || role}</p>
+            </div>
+          </div>
+        )}
         <Button
           variant="ghost"
-          className="w-full justify-start text-blue-200 hover:bg-blue-800 hover:text-white"
+          className="w-full justify-start text-white/70 hover:bg-white/10 hover:text-white"
           onClick={() => signOut({ callbackUrl: '/login' })}
         >
           <LogOut className="w-4 h-4 mr-3" />

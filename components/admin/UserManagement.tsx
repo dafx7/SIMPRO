@@ -45,9 +45,9 @@ const roleLabels: Record<string, string> = {
 }
 
 const roleBadgeStyles: Record<string, string> = {
-  ADMIN: 'bg-purple-100 text-purple-700',
-  MAHASISWA: 'bg-blue-100 text-blue-700',
-  DOSEN: 'bg-green-100 text-green-700',
+  ADMIN: 'bg-wbi-gold/10 text-wbi-gold-dark',
+  MAHASISWA: 'bg-wbi-teal/10 text-wbi-teal-dark',
+  DOSEN: 'bg-emerald-100 text-emerald-700',
 }
 
 export default function UserManagement() {
@@ -168,7 +168,7 @@ export default function UserManagement() {
         </Select>
 
         <Dialog open={addOpen} onOpenChange={(v) => { setAddOpen(v); if (!v) { setTempPassword(null) } }}>
-          <DialogTrigger className="bg-blue-800 hover:bg-blue-900 text-white inline-flex items-center justify-center rounded-md text-sm font-medium h-9 px-4 py-2 cursor-pointer transition-colors">
+          <DialogTrigger className="bg-gradient-to-br from-wbi-forest to-wbi-teal text-white inline-flex items-center justify-center rounded-xl text-sm font-medium h-9 px-4 py-2 cursor-pointer transition-all shadow-md shadow-wbi-teal/20 hover:shadow-lg hover:shadow-wbi-teal/30 hover:scale-[1.02]">
             <UserPlus className="mr-2 h-4 w-4" />
             Tambah Pengguna
           </DialogTrigger>
@@ -184,12 +184,12 @@ export default function UserManagement() {
 
             {tempPassword ? (
               <div className="space-y-4 py-2">
-                <div className="p-4 bg-green-50 border border-green-200 rounded-lg text-center">
+                <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-center">
                   <p className="text-sm text-gray-600 mb-2">Password Sementara:</p>
-                  <p className="text-2xl font-mono font-bold text-green-700 tracking-widest">{tempPassword}</p>
+                  <p className="text-2xl font-mono font-bold text-emerald-700 tracking-widest">{tempPassword}</p>
                   <p className="text-xs text-gray-400 mt-2">Salin dan bagikan kepada pengguna. Password harus segera diganti.</p>
                 </div>
-                <Button className="w-full" onClick={() => { setAddOpen(false); setTempPassword(null) }}>
+                <Button variant="gradient" className="w-full" onClick={() => { setAddOpen(false); setTempPassword(null) }}>
                   Selesai
                 </Button>
               </div>
@@ -258,7 +258,7 @@ export default function UserManagement() {
 
                 <DialogFooter>
                   <Button type="button" variant="outline" onClick={() => setAddOpen(false)}>Batal</Button>
-                  <Button type="submit" className="bg-blue-800 hover:bg-blue-900" disabled={isAdding}>
+                  <Button type="submit" variant="gradient" disabled={isAdding}>
                     {isAdding ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Menyimpan...</> : 'Tambah Pengguna'}
                   </Button>
                 </DialogFooter>
@@ -268,25 +268,25 @@ export default function UserManagement() {
         </Dialog>
       </div>
 
-      <div className="text-sm text-gray-500">{total} pengguna ditemukan</div>
+      <div className="text-sm text-muted-foreground">{total} pengguna ditemukan</div>
 
-      <div className="overflow-x-auto rounded-lg border bg-white">
+      <div className="overflow-x-auto rounded-2xl border border-border bg-white">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b bg-gray-50">
-              <th className="text-left p-3 font-medium text-gray-600">Nama</th>
-              <th className="text-left p-3 font-medium text-gray-600">Email</th>
-              <th className="text-left p-3 font-medium text-gray-600">Role</th>
-              <th className="text-left p-3 font-medium text-gray-600">Info</th>
-              <th className="text-left p-3 font-medium text-gray-600">Status</th>
-              <th className="text-left p-3 font-medium text-gray-600">Terdaftar</th>
+            <tr className="border-b border-border bg-wbi-cream">
+              <th className="text-left p-3 font-semibold text-wbi-olive">Nama</th>
+              <th className="text-left p-3 font-semibold text-wbi-olive">Email</th>
+              <th className="text-left p-3 font-semibold text-wbi-olive">Role</th>
+              <th className="text-left p-3 font-semibold text-wbi-olive">Info</th>
+              <th className="text-left p-3 font-semibold text-wbi-olive">Status</th>
+              <th className="text-left p-3 font-semibold text-wbi-olive">Terdaftar</th>
               <th className="p-3"></th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
               Array.from({ length: 5 }).map((_, i) => (
-                <tr key={i} className="border-b">
+                <tr key={i} className="border-b border-border">
                   <td className="p-3"><Skeleton className="h-4 w-32" /></td>
                   <td className="p-3"><Skeleton className="h-4 w-40" /></td>
                   <td className="p-3"><Skeleton className="h-6 w-20" /></td>
@@ -300,22 +300,22 @@ export default function UserManagement() {
               <tr>
                 <td colSpan={7} className="p-12 text-center">
                   <Users className="w-10 h-10 text-gray-200 mx-auto mb-2" />
-                  <p className="text-gray-400">Tidak ada pengguna ditemukan</p>
+                  <p className="text-muted-foreground">Tidak ada pengguna ditemukan</p>
                 </td>
               </tr>
             ) : (
               users.map((user) => (
-                <tr key={user.id} className="border-b hover:bg-gray-50">
+                <tr key={user.id} className="border-b border-border last:border-0 hover:bg-wbi-teal/5 transition-colors">
                   <td className="p-3">
                     <p className="font-medium">{user.fullName}</p>
                   </td>
-                  <td className="p-3 text-gray-600 text-xs">{user.email}</td>
+                  <td className="p-3 text-muted-foreground text-xs">{user.email}</td>
                   <td className="p-3">
                     <span className={`text-xs px-2 py-1 rounded-full font-medium ${roleBadgeStyles[user.role]}`}>
                       {roleLabels[user.role]}
                     </span>
                   </td>
-                  <td className="p-3 text-xs text-gray-500">
+                  <td className="p-3 text-xs text-muted-foreground">
                     {user.role === 'MAHASISWA' && (
                       <div>
                         {user.nim && <p>NIM: {user.nim}</p>}
@@ -331,11 +331,11 @@ export default function UserManagement() {
                     )}
                   </td>
                   <td className="p-3">
-                    <span className={`text-xs px-2 py-1 rounded-full ${user.isActive ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
+                    <span className={`text-xs px-2 py-1 rounded-full ${user.isActive ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-500'}`}>
                       {user.isActive ? 'Aktif' : 'Nonaktif'}
                     </span>
                   </td>
-                  <td className="p-3 text-gray-500 text-xs">
+                  <td className="p-3 text-muted-foreground text-xs">
                     {format(new Date(user.createdAt), 'd MMM yyyy', { locale: idLocale })}
                   </td>
                   <td className="p-3">
@@ -364,12 +364,12 @@ export default function UserManagement() {
 
       {totalPages > 1 && (
         <div className="flex items-center justify-between">
-          <p className="text-sm text-gray-500">Halaman {page} dari {totalPages}</p>
+          <p className="text-sm text-muted-foreground">Halaman {page} dari {totalPages}</p>
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={() => setPage((p) => p - 1)} disabled={page === 1}>
+            <Button variant="outline" size="icon-sm" className="rounded-full" onClick={() => setPage((p) => p - 1)} disabled={page === 1}>
               <ChevronLeft className="h-4 w-4" />
             </Button>
-            <Button variant="outline" size="sm" onClick={() => setPage((p) => p + 1)} disabled={page === totalPages}>
+            <Button variant="outline" size="icon-sm" className="rounded-full" onClick={() => setPage((p) => p + 1)} disabled={page === totalPages}>
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>

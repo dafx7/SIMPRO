@@ -3,8 +3,10 @@ import { redirect } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
 import ProposalTable from '@/components/proposals/ProposalTable'
 import StatsCard from '@/components/dashboard/StatsCard'
-import { FileText, CheckCircle, Clock, XCircle, AlertCircle } from 'lucide-react'
+import WelcomeBanner from '@/components/dashboard/WelcomeBanner'
+import { FileText, CheckCircle, Clock, XCircle } from 'lucide-react'
 import AdminDashboardCharts from '@/components/admin/AdminDashboardCharts'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 export default async function AdminProposalsPage() {
   const session = await auth()
@@ -24,12 +26,12 @@ export default async function AdminProposalsPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Dashboard Admin</h1>
-        <p className="text-gray-500 mt-1">Ringkasan sistem manajemen proposal Tugas Akhir mahasiswa</p>
-      </div>
+      <WelcomeBanner
+        title="Dashboard Admin"
+        subtitle="Ringkasan sistem manajemen proposal Tugas Akhir mahasiswa"
+      />
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
         <StatsCard title="Total Proposal TA" value={total} icon={FileText} color="blue" />
         <StatsCard title="Menunggu Tindakan" value={submitted + underReview} icon={Clock} color="amber" description="Diajukan + Dalam Penilaian" />
         <StatsCard title="Disetujui Bulan Ini" value={approvedThisMonth} icon={CheckCircle} color="green" />
@@ -38,14 +40,23 @@ export default async function AdminProposalsPage() {
 
       <AdminDashboardCharts />
 
-      <div>
-        <h2 className="text-lg font-semibold mb-4">Semua Proposal TA Mahasiswa</h2>
-        <ProposalTable
-          showSubmitter
-          baseApiUrl="/api/proposals"
-          linkPrefix="/proposals"
-        />
-      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-base">
+            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-wbi-forest/10 text-wbi-forest">
+              <FileText className="h-4 w-4" />
+            </span>
+            Semua Proposal TA Mahasiswa
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ProposalTable
+            showSubmitter
+            baseApiUrl="/api/proposals"
+            linkPrefix="/proposals"
+          />
+        </CardContent>
+      </Card>
     </div>
   )
 }

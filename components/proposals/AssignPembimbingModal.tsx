@@ -64,21 +64,24 @@ export default function AssignPembimbingModal({ proposalId, currentPembimbingId 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
-        <Button className="w-full bg-blue-700 hover:bg-blue-800">
+        <Button variant="gradient" className="w-full">
           <UserCheck className="w-4 h-4 mr-2" />
           Tugaskan Pembimbing
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-md">
-        <DialogHeader>
+        <DialogHeader className="flex-row items-center gap-3 space-y-0">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-wbi-teal/10 text-wbi-teal-dark">
+            <UserCheck className="h-4 w-4" />
+          </span>
           <DialogTitle>Tugaskan Dosen Pembimbing</DialogTitle>
         </DialogHeader>
         <div className="space-y-4 pt-2">
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-muted-foreground">
             Pilih dosen yang akan menjadi pembimbing Tugas Akhir mahasiswa ini.
           </p>
           <Select value={selectedId} onValueChange={(v) => setSelectedId((v as string) || '')}>
-            <SelectTrigger>
+            <SelectTrigger className="w-full">
               <SelectValue placeholder="Pilih Dosen Pembimbing" />
             </SelectTrigger>
             <SelectContent>
@@ -93,7 +96,7 @@ export default function AssignPembimbingModal({ proposalId, currentPembimbingId 
             </SelectContent>
           </Select>
           {selectedId && (
-            <div className="bg-blue-50 rounded p-3 text-sm">
+            <div className="bg-wbi-teal/5 border border-wbi-teal/20 rounded-xl p-3 text-sm">
               {dosenList.find((d) => d.id === selectedId)?.expertise && (
                 <p className="text-gray-600">
                   Keahlian: {dosenList.find((d) => d.id === selectedId)?.expertise}
@@ -106,7 +109,8 @@ export default function AssignPembimbingModal({ proposalId, currentPembimbingId 
               Batal
             </Button>
             <Button
-              className="flex-1 bg-blue-700 hover:bg-blue-800"
+              variant="gradient"
+              className="flex-1"
               onClick={handleSubmit}
               disabled={loading || !selectedId}
             >

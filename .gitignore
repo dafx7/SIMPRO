@@ -39,3 +39,16 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# ai service
+ai-service/__pycache__/
+ai-service/venv/
+ai-service/.env
+
+# screenshots & recordings (for local report use only)
+/screenshots/
+/demo-recordings/
+
+# uploads
+/public/uploads/
+!/public/uploads/.gitkeep

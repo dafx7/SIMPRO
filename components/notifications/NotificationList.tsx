@@ -21,12 +21,12 @@ import {
 import { NotificationData, NotificationType } from '@/types'
 import { useRouter } from 'next/navigation'
 
-const typeConfig: Record<NotificationType, { icon: React.ReactNode; color: string }> = {
-  STATUS_CHANGE: { icon: <GitBranch className="w-4 h-4" />, color: 'text-blue-500' },
-  ASSIGNMENT: { icon: <UserPlus className="w-4 h-4" />, color: 'text-purple-500' },
-  REVIEW_SUBMITTED: { icon: <Star className="w-4 h-4" />, color: 'text-amber-500' },
-  DECISION_MADE: { icon: <Gavel className="w-4 h-4" />, color: 'text-green-500' },
-  DEADLINE_REMINDER: { icon: <Clock className="w-4 h-4" />, color: 'text-red-500' },
+const typeConfig: Record<NotificationType, { icon: React.ReactNode; color: string; border: string }> = {
+  STATUS_CHANGE: { icon: <GitBranch className="w-4 h-4" />, color: 'text-wbi-teal-dark bg-wbi-teal/10', border: 'border-l-wbi-teal' },
+  ASSIGNMENT: { icon: <UserPlus className="w-4 h-4" />, color: 'text-purple-600 bg-purple-50', border: 'border-l-purple-400' },
+  REVIEW_SUBMITTED: { icon: <Star className="w-4 h-4" />, color: 'text-wbi-gold-dark bg-wbi-gold/10', border: 'border-l-wbi-gold' },
+  DECISION_MADE: { icon: <Gavel className="w-4 h-4" />, color: 'text-emerald-600 bg-emerald-50', border: 'border-l-emerald-400' },
+  DEADLINE_REMINDER: { icon: <Clock className="w-4 h-4" />, color: 'text-red-600 bg-red-50', border: 'border-l-red-400' },
 }
 
 export default function NotificationList() {
@@ -85,7 +85,7 @@ export default function NotificationList() {
     <div className="space-y-4">
       {unreadCount > 0 && (
         <div className="flex items-center justify-between">
-          <span className="text-sm text-gray-500">{unreadCount} belum dibaca</span>
+          <span className="text-sm text-muted-foreground">{unreadCount} belum dibaca</span>
           <Button
             variant="outline"
             size="sm"
@@ -101,7 +101,7 @@ export default function NotificationList() {
       <div className="space-y-2">
         {loading ? (
           Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="flex gap-3 p-4 border rounded-lg bg-white">
+            <div key={i} className="flex gap-3 p-4 border rounded-2xl bg-white">
               <Skeleton className="w-9 h-9 rounded-full flex-shrink-0" />
               <div className="flex-1 space-y-2">
                 <Skeleton className="h-4 w-3/4" />
@@ -113,7 +113,7 @@ export default function NotificationList() {
         ) : notifications.length === 0 ? (
           <div className="text-center py-12">
             <Bell className="w-12 h-12 text-gray-200 mx-auto mb-3" />
-            <p className="text-gray-400">Belum ada notifikasi</p>
+            <p className="text-muted-foreground">Belum ada notifikasi</p>
           </div>
         ) : (
           notifications.map((notif) => {
@@ -123,20 +123,18 @@ export default function NotificationList() {
             return (
               <div
                 key={notif.id}
-                className={`flex gap-3 p-4 border rounded-lg transition-colors ${
-                  !notif.isRead ? 'bg-blue-50 border-blue-100' : 'bg-white'
+                className={`flex gap-3 p-4 border border-l-4 rounded-2xl transition-colors ${config.border} ${
+                  !notif.isRead ? 'bg-wbi-teal/5' : 'bg-white'
                 }`}
               >
-                <div className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 ${
-                  !notif.isRead ? 'bg-blue-100' : 'bg-gray-100'
-                } ${config.color}`}>
+                <div className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 ${config.color}`}>
                   {config.icon}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className={`text-sm font-medium ${!notif.isRead ? 'text-blue-900' : 'text-gray-800'}`}>
+                  <p className={`text-sm ${!notif.isRead ? 'font-bold text-wbi-forest' : 'font-medium text-gray-800'}`}>
                     {notif.title}
                   </p>
-                  <p className="text-xs text-gray-500 mt-0.5 line-clamp-2">{notif.message}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{notif.message}</p>
                   <p className="text-xs text-gray-400 mt-1">
                     {formatDistanceToNow(new Date(notif.createdAt), {
                       addSuffix: true,
@@ -146,7 +144,7 @@ export default function NotificationList() {
                 </div>
                 <div className="flex flex-col items-end gap-2">
                   {!notif.isRead && (
-                    <div className="w-2 h-2 rounded-full bg-blue-500 flex-shrink-0" />
+                    <div className="w-2 h-2 rounded-full bg-wbi-gold flex-shrink-0" />
                   )}
                   {proposalLink && (
                     <Link href={proposalLink} onClick={() => !notif.isRead && markRead(notif.id)}>
@@ -164,12 +162,12 @@ export default function NotificationList() {
 
       {totalPages > 1 && (
         <div className="flex items-center justify-between">
-          <p className="text-sm text-gray-500">Halaman {page} dari {totalPages}</p>
+          <p className="text-sm text-muted-foreground">Halaman {page} dari {totalPages}</p>
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={() => setPage((p) => p - 1)} disabled={page === 1}>
+            <Button variant="outline" size="icon-sm" className="rounded-full" onClick={() => setPage((p) => p - 1)} disabled={page === 1}>
               <ChevronLeft className="h-4 w-4" />
             </Button>
-            <Button variant="outline" size="sm" onClick={() => setPage((p) => p + 1)} disabled={page === totalPages}>
+            <Button variant="outline" size="icon-sm" className="rounded-full" onClick={() => setPage((p) => p + 1)} disabled={page === totalPages}>
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>

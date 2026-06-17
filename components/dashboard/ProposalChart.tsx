@@ -37,15 +37,15 @@ interface ProposalChartProps {
 }
 
 const STATUS_COLORS = {
-  DRAFT: '#9ca3af',
-  SUBMITTED: '#3b82f6',
-  UNDER_REVIEW: '#f59e0b',
-  REVISION: '#f97316',
-  APPROVED: '#22c55e',
-  REJECTED: '#ef4444',
+  DRAFT: '#94A3B8',
+  SUBMITTED: '#4D8C85',
+  UNDER_REVIEW: '#BD8527',
+  REVISION: '#EA8C3A',
+  APPROVED: '#2D9D6F',
+  REJECTED: '#DC4545',
 }
 
-const FIELD_COLORS = ['#1e40af', '#3b82f6', '#60a5fa', '#93c5fd', '#bfdbfe', '#dbeafe']
+const FIELD_COLORS = ['#16332A', '#4D8C85', '#BD8527', '#6BA39C', '#D4A04A', '#3A6E68']
 
 function formatMonth(month: string): string {
   const [year, m] = month.split('-')
@@ -65,7 +65,7 @@ export function MonthlyBarChart({ data }: { data: MonthlyData[] }) {
           formatter={(value) => [value, 'Proposal']}
           contentStyle={{ borderRadius: '8px', border: '1px solid #e2e8f0' }}
         />
-        <Bar dataKey="count" fill="#1e40af" radius={[4, 4, 0, 0]} />
+        <Bar dataKey="count" fill="#4D8C85" radius={[6, 6, 0, 0]} />
       </BarChart>
     </ResponsiveContainer>
   )

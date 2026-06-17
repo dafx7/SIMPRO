@@ -11,8 +11,8 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
-import { Progress } from '@/components/ui/progress'
-import { Loader2, Upload, FileText, CheckCircle2, ChevronRight, ChevronLeft } from 'lucide-react'
+import { Loader2, Upload, FileText, CheckCircle2, ChevronRight, ChevronLeft, Check } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 const STEPS = ['Info Dasar', 'Upload Dokumen', 'Konfirmasi']
 
@@ -123,28 +123,56 @@ export default function ProposalForm() {
   const formValues = watch()
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
-      <div className="space-y-2">
-        <div className="flex justify-between text-sm text-gray-500 mb-1">
-          {STEPS.map((s, i) => (
-            <span
-              key={s}
-              className={`font-medium ${step === i + 1 ? 'text-blue-700' : step > i + 1 ? 'text-green-600' : ''}`}
-            >
-              {step > i + 1 ? '✓ ' : `${i + 1}. `}{s}
-            </span>
-          ))}
-        </div>
-        <Progress value={(step / 3) * 100} className="h-2" />
+    <div className="max-w-2xl mx-auto space-y-8">
+      <div className="flex items-center justify-between px-2">
+        {STEPS.map((s, i) => {
+          const stepNum = i + 1
+          const isActive = step === stepNum
+          const isDone = step > stepNum
+          return (
+            <div key={s} className="flex flex-1 items-center last:flex-none">
+              <div className="flex flex-col items-center gap-1.5">
+                <div
+                  className={cn(
+                    'flex h-9 w-9 items-center justify-center rounded-full text-sm font-semibold transition-all duration-200',
+                    isDone
+                      ? 'bg-gradient-to-br from-wbi-forest to-wbi-teal text-white'
+                      : isActive
+                      ? 'bg-gradient-to-br from-wbi-forest to-wbi-teal text-white shadow-md shadow-wbi-teal/30 scale-110'
+                      : 'border-2 border-gray-200 text-gray-400'
+                  )}
+                >
+                  {isDone ? <Check className="h-4 w-4" /> : stepNum}
+                </div>
+                <span
+                  className={cn(
+                    'text-xs font-medium whitespace-nowrap',
+                    isActive ? 'text-wbi-forest' : isDone ? 'text-wbi-teal-dark' : 'text-gray-400'
+                  )}
+                >
+                  {s}
+                </span>
+              </div>
+              {stepNum !== STEPS.length && (
+                <div
+                  className={cn(
+                    'mx-2 h-0.5 flex-1 rounded-full transition-colors duration-200',
+                    isDone ? 'bg-wbi-teal' : 'bg-gray-200'
+                  )}
+                />
+              )}
+            </div>
+          )
+        })}
       </div>
 
       {step === 1 && (
         <Card>
-          <CardHeader>
+          <CardHeader className="px-8 pt-6">
             <CardTitle>Informasi Dasar Proposal TA</CardTitle>
             <CardDescription>Isi informasi dasar proposal Tugas Akhir Anda</CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="px-8 pb-8">
             <form onSubmit={handleSubmit(onStep1Submit)} className="space-y-5">
               <div className="space-y-2">
                 <Label htmlFor="title">Judul Proposal TA *</Label>
@@ -174,7 +202,8 @@ export default function ProposalForm() {
 
               <Button
                 type="submit"
-                className="w-full bg-blue-800 hover:bg-blue-900"
+                variant="gradient"
+                className="w-full"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? (
@@ -190,14 +219,14 @@ export default function ProposalForm() {
 
       {step === 2 && (
         <Card>
-          <CardHeader>
+          <CardHeader className="px-8 pt-6">
             <CardTitle>Upload Dokumen Proposal</CardTitle>
             <CardDescription>Upload file PDF proposal (opsional, maksimal 10MB)</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="px-8 pb-8 space-y-4">
             <div
-              className={`border-2 border-dashed rounded-xl p-8 text-center transition-colors ${
-                isDragging ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-blue-300'
+              className={`border-2 border-dashed rounded-2xl p-8 text-center transition-colors duration-200 ${
+                isDragging ? 'border-wbi-teal bg-wbi-teal/5' : 'border-gray-200 hover:border-wbi-teal/50'
               }`}
               onDragOver={(e) => { e.preventDefault(); setIsDragging(true) }}
               onDragLeave={() => setIsDragging(false)}
@@ -210,12 +239,12 @@ export default function ProposalForm() {
             >
               {isUploading ? (
                 <div className="flex flex-col items-center">
-                  <Loader2 className="w-8 h-8 animate-spin text-blue-500 mb-2" />
-                  <p className="text-sm text-gray-500">Mengunggah...</p>
+                  <Loader2 className="w-8 h-8 animate-spin text-wbi-teal mb-2" />
+                  <p className="text-sm text-muted-foreground">Mengunggah...</p>
                 </div>
               ) : uploadedFile ? (
                 <div className="flex flex-col items-center">
-                  <CheckCircle2 className="w-10 h-10 text-green-500 mb-2" />
+                  <CheckCircle2 className="w-10 h-10 text-wbi-gold mb-2" />
                   <p className="font-medium text-sm">{uploadedFile.name}</p>
                   <p className="text-xs text-gray-400">
                     {(uploadedFile.size / 1024 / 1024).toFixed(2)} MB
@@ -223,10 +252,10 @@ export default function ProposalForm() {
                 </div>
               ) : (
                 <div className="flex flex-col items-center">
-                  <Upload className="w-10 h-10 text-gray-300 mb-2" />
+                  <Upload className="w-10 h-10 text-wbi-teal/40 mb-2" />
                   <p className="text-sm font-medium text-gray-600">Seret file ke sini</p>
                   <p className="text-xs text-gray-400 mt-1">atau</p>
-                  <label className="mt-2 cursor-pointer text-blue-600 text-sm hover:underline">
+                  <label className="mt-2 cursor-pointer text-wbi-teal-dark text-sm hover:underline font-medium">
                     Pilih file PDF
                     <input
                       type="file"
@@ -248,7 +277,8 @@ export default function ProposalForm() {
                 <ChevronLeft className="mr-2 h-4 w-4" /> Kembali
               </Button>
               <Button
-                className="flex-1 bg-blue-800 hover:bg-blue-900"
+                variant="gradient"
+                className="flex-1"
                 onClick={() => setStep(3)}
               >
                 Lanjutkan <ChevronRight className="ml-2 h-4 w-4" />
@@ -260,12 +290,12 @@ export default function ProposalForm() {
 
       {step === 3 && (
         <Card>
-          <CardHeader>
+          <CardHeader className="px-8 pt-6">
             <CardTitle>Konfirmasi Proposal TA</CardTitle>
             <CardDescription>Periksa kembali data proposal Anda sebelum disubmit</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="bg-gray-50 rounded-lg p-4 space-y-3">
+          <CardContent className="px-8 pb-8 space-y-4">
+            <div className="bg-wbi-cream rounded-2xl p-5 space-y-3">
               <div>
                 <p className="text-xs text-gray-500 uppercase tracking-wide">Judul</p>
                 <p className="font-medium mt-1">{formValues.title}</p>
@@ -278,7 +308,7 @@ export default function ProposalForm() {
                 <div>
                   <p className="text-xs text-gray-500 uppercase tracking-wide">Dokumen</p>
                   <div className="flex items-center gap-2 mt-1">
-                    <FileText className="w-4 h-4 text-blue-500" />
+                    <FileText className="w-4 h-4 text-wbi-teal" />
                     <span className="text-sm">{uploadedFile.name}</span>
                   </div>
                 </div>
@@ -304,7 +334,8 @@ export default function ProposalForm() {
                 Simpan sebagai Draft
               </Button>
               <Button
-                className="flex-1 bg-blue-800 hover:bg-blue-900"
+                variant="gradient"
+                className="flex-1"
                 disabled={isSubmitting}
                 onClick={() => handleFinalSubmit('submit')}
               >

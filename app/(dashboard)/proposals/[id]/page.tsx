@@ -13,7 +13,8 @@ import ReviewForm from '@/components/reviews/ReviewForm'
 import AssignPembimbingModal from '@/components/proposals/AssignPembimbingModal'
 import AssignPengujiModal from '@/components/proposals/AssignPengujiModal'
 import DecisionModal from '@/components/proposals/DecisionModal'
-import { AlertTriangle, Download, Star, UserCheck, Users } from 'lucide-react'
+import SimilarityWarning from '@/components/proposals/SimilarityWarning'
+import { Download, Star, UserCheck, Users } from 'lucide-react'
 import { ProposalStatus, ReviewRecommendation } from '@/types'
 
 interface Props {
@@ -80,24 +81,18 @@ export default async function ProposalDetailPage({ params }: Props) {
       <div className="flex items-start justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <Link href={backHref} className="text-sm text-blue-600 hover:underline">
+            <Link href={backHref} className="text-sm text-wbi-teal-dark hover:underline font-medium">
               ← Kembali
             </Link>
           </div>
-          <h1 className="text-xl font-bold text-gray-900">{proposal.title}</h1>
-          <p className="text-gray-500 text-sm mt-1">{proposal.jurusan}</p>
+          <h1 className="font-heading text-xl font-bold text-wbi-forest">{proposal.title}</h1>
+          <p className="text-muted-foreground text-sm mt-1">{proposal.jurusan}</p>
         </div>
         <StatusBadge status={proposal.status as ProposalStatus} size="lg" />
       </div>
 
-      {proposal.similarityFlag && (
-        <div className="flex items-center gap-2 p-3 bg-amber-50 border border-amber-200 rounded-lg text-amber-700 text-sm">
-          <AlertTriangle className="w-4 h-4 flex-shrink-0" />
-          <span>
-            Terdeteksi kemiripan tinggi ({proposal.similarityScore?.toFixed(1)}%) dengan proposal lain.
-            Harap tinjau kembali orisinalitas.
-          </span>
-        </div>
+      {role === 'ADMIN' && (
+        <SimilarityWarning proposalId={proposal.id} status={proposal.status} role={role} />
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -201,7 +196,7 @@ export default async function ProposalDetailPage({ params }: Props) {
               </CardHeader>
               <CardContent className="space-y-3">
                 {proposal.assignments.map((a) => (
-                  <div key={a.id} className="flex items-center justify-between border rounded-lg p-3">
+                  <div key={a.id} className="flex items-center justify-between border border-border rounded-xl p-3">
                     <div>
                       <p className="font-medium text-sm">{a.penguji.fullName}</p>
                       {a.penguji.nidn && <p className="text-xs text-gray-500">NIDN: {a.penguji.nidn}</p>}
@@ -209,8 +204,8 @@ export default async function ProposalDetailPage({ params }: Props) {
                     </div>
                     <span className={`text-xs px-2 py-1 rounded-full ${
                       a.status === 'COMPLETED'
-                        ? 'bg-green-100 text-green-700'
-                        : 'bg-amber-100 text-amber-700'
+                        ? 'bg-emerald-100 text-emerald-700'
+                        : 'bg-wbi-gold/10 text-wbi-gold-dark'
                     }`}>
                       {a.status === 'COMPLETED' ? 'Selesai' : 'Menunggu Penilaian'}
                     </span>
@@ -240,8 +235,8 @@ export default async function ProposalDetailPage({ params }: Props) {
           )}
 
           {role === 'DOSEN' && myAssignment?.reviewForm && (
-            <Card className="border-green-200">
-              <CardHeader><CardTitle className="text-base text-green-700">Penilaian Anda Telah Dikirim</CardTitle></CardHeader>
+            <Card className="border-emerald-200">
+              <CardHeader><CardTitle className="text-base text-emerald-700">Penilaian Anda Telah Dikirim</CardTitle></CardHeader>
               <CardContent className="space-y-3">
                 {[
                   { label: 'Orisinalitas', value: myAssignment.reviewForm.originalityScore },
@@ -253,14 +248,14 @@ export default async function ProposalDetailPage({ params }: Props) {
                     <span className="text-sm text-gray-600">{item.label}</span>
                     <div className="flex gap-0.5">
                       {[1, 2, 3, 4, 5].map((s) => (
-                        <Star key={s} className={`w-4 h-4 ${s <= item.value ? 'fill-amber-400 text-amber-400' : 'text-gray-200'}`} />
+                        <Star key={s} className={`w-4 h-4 ${s <= item.value ? 'fill-wbi-gold text-wbi-gold' : 'text-gray-200'}`} />
                       ))}
                     </div>
                   </div>
                 ))}
                 <Separator />
                 <p className="text-sm text-gray-700">{myAssignment.reviewForm.comments}</p>
-                <div className="inline-block px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-700">
+                <div className="inline-block px-3 py-1 rounded-full text-sm font-medium bg-wbi-teal/10 text-wbi-teal-dark">
                   Rekomendasi: {recommendationLabels[myAssignment.reviewForm.recommendation as ReviewRecommendation]}
                 </div>
               </CardContent>
@@ -275,7 +270,7 @@ export default async function ProposalDetailPage({ params }: Props) {
               </CardHeader>
               <CardContent className="space-y-4">
                 {proposal.assignments.map((assignment) => (
-                  <div key={assignment.id} className="border rounded-lg p-4 space-y-3">
+                  <div key={assignment.id} className="border border-border rounded-xl p-4 space-y-3">
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="font-medium text-sm">{assignment.penguji.fullName}</p>
@@ -283,8 +278,8 @@ export default async function ProposalDetailPage({ params }: Props) {
                       </div>
                       <span className={`text-xs px-2 py-1 rounded-full ${
                         assignment.status === 'COMPLETED'
-                          ? 'bg-green-100 text-green-700'
-                          : 'bg-amber-100 text-amber-700'
+                          ? 'bg-emerald-100 text-emerald-700'
+                          : 'bg-wbi-gold/10 text-wbi-gold-dark'
                       }`}>
                         {assignment.status === 'COMPLETED' ? 'Selesai' : 'Menunggu'}
                       </span>
@@ -298,14 +293,14 @@ export default async function ProposalDetailPage({ params }: Props) {
                             { label: 'Kelayakan', value: assignment.reviewForm.feasibilityScore },
                             { label: 'Relevansi', value: assignment.reviewForm.relevanceScore },
                           ].map((item) => (
-                            <div key={item.label} className="flex items-center justify-between bg-gray-50 rounded p-2">
+                            <div key={item.label} className="flex items-center justify-between bg-wbi-cream rounded-lg p-2">
                               <span>{item.label}</span>
-                              <span className="font-bold text-blue-700">{item.value}/5</span>
+                              <span className="font-bold text-wbi-teal-dark">{item.value}/5</span>
                             </div>
                           ))}
                         </div>
                         <p className="text-xs text-gray-600">{assignment.reviewForm.comments}</p>
-                        <div className="text-xs font-medium px-2 py-1 rounded-full inline-block bg-blue-50 text-blue-700">
+                        <div className="text-xs font-medium px-2 py-1 rounded-full inline-block bg-wbi-teal/10 text-wbi-teal-dark">
                           {recommendationLabels[assignment.reviewForm.recommendation as ReviewRecommendation]}
                         </div>
                         {assignment.recommendationScore && (

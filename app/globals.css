@@ -9,7 +9,7 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
+  --font-heading: var(--font-heading);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -46,41 +46,82 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* WBI brand colors exposed as Tailwind utilities (bg-wbi-forest, text-wbi-teal, etc.) */
+  --color-wbi-forest: var(--wbi-forest);
+  --color-wbi-forest-light: var(--wbi-forest-light);
+  --color-wbi-teal: var(--wbi-teal);
+  --color-wbi-teal-light: var(--wbi-teal-light);
+  --color-wbi-teal-dark: var(--wbi-teal-dark);
+  --color-wbi-gold: var(--wbi-gold);
+  --color-wbi-gold-light: var(--wbi-gold-light);
+  --color-wbi-gold-dark: var(--wbi-gold-dark);
+  --color-wbi-olive: var(--wbi-olive);
+  --color-wbi-cream: var(--wbi-cream);
+
+  --color-status-draft: var(--status-draft);
+  --color-status-submitted: var(--status-submitted);
+  --color-status-review: var(--status-review);
+  --color-status-revision: var(--status-revision);
+  --color-status-approved: var(--status-approved);
+  --color-status-rejected: var(--status-rejected);
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  /* Primary brand colors from WBI logo */
+  --wbi-forest: #16332A;
+  --wbi-teal: #4D8C85;
+  --wbi-gold: #BD8527;
+  --wbi-olive: #4A4730;
+  --wbi-cream: #F5F4F2;
+
+  /* Derived shades for UI states */
+  --wbi-forest-light: #1F4538;
+  --wbi-teal-light: #6BA39C;
+  --wbi-teal-dark: #3A6E68;
+  --wbi-gold-light: #D4A04A;
+  --wbi-gold-dark: #9A6B1F;
+
+  /* Semantic status colors */
+  --status-draft: #94A3B8;
+  --status-submitted: #4D8C85;
+  --status-review: #BD8527;
+  --status-revision: #EA8C3A;
+  --status-approved: #2D9D6F;
+  --status-rejected: #DC4545;
+
+  --background: var(--wbi-cream);
+  --foreground: #1c2620;
+  --card: #ffffff;
+  --card-foreground: #1c2620;
+  --popover: #ffffff;
+  --popover-foreground: #1c2620;
+  --primary: var(--wbi-forest);
+  --primary-foreground: #ffffff;
+  --secondary: #eef0ec;
+  --secondary-foreground: var(--wbi-forest);
+  --muted: #eef0ec;
+  --muted-foreground: #667468;
+  --accent: #e4ece9;
+  --accent-foreground: var(--wbi-forest);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --border: #e1e4de;
+  --input: #e1e4de;
+  --ring: var(--wbi-teal);
+  --chart-1: var(--wbi-teal);
+  --chart-2: var(--wbi-gold);
+  --chart-3: var(--wbi-forest);
+  --chart-4: #EA8C3A;
+  --chart-5: #6BA39C;
+  --radius: 0.85rem;
+  --sidebar: var(--wbi-forest);
+  --sidebar-foreground: #f5f4f2;
+  --sidebar-primary: var(--wbi-teal);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: var(--wbi-forest-light);
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: rgba(255, 255, 255, 0.1);
+  --sidebar-ring: var(--wbi-teal);
 }
 
 .dark {
@@ -126,5 +167,20 @@
   }
   html {
     @apply font-sans;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading;
+  }
+}
+
+@layer utilities {
+  .wbi-gradient {
+    background-image: linear-gradient(135deg, var(--wbi-forest) 0%, var(--wbi-teal) 100%);
+  }
+  .wbi-gradient-text {
+    background-image: linear-gradient(135deg, var(--wbi-forest) 0%, var(--wbi-teal) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
 }

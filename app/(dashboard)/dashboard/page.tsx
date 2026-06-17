@@ -6,6 +6,7 @@ import { id } from 'date-fns/locale'
 import { FileText, CheckCircle, Clock, AlertCircle, BookOpen, ClipboardList } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import StatsCard from '@/components/dashboard/StatsCard'
+import WelcomeBanner from '@/components/dashboard/WelcomeBanner'
 import StatusBadge from '@/components/proposals/StatusBadge'
 import { ProposalStatus } from '@/types'
 import Link from 'next/link'
@@ -40,15 +41,12 @@ export default async function DashboardPage() {
 
     return (
       <div className="space-y-6">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-500 mt-1">
-            Selamat datang, <strong>{fullName || 'Mahasiswa'}</strong>
-            {nim ? ` (NIM: ${nim})` : ''}!
-          </p>
-        </div>
+        <WelcomeBanner
+          title={`Selamat datang, ${fullName || 'Mahasiswa'}!`}
+          subtitle={nim ? `NIM: ${nim}` : 'Kelola proposal Tugas Akhir Anda di sini'}
+        />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <StatsCard title="Total Proposal" value={stats.total} icon={FileText} color="blue" />
           <StatsCard title="Disetujui" value={stats.approved} icon={CheckCircle} color="green" />
           <StatsCard title="Dalam Penilaian" value={stats.underReview} icon={Clock} color="amber" />
@@ -57,14 +55,19 @@ export default async function DashboardPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Proposal TA Terbaru</CardTitle>
+            <CardTitle className="flex items-center gap-2 text-base">
+              <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-wbi-teal/10 text-wbi-teal-dark">
+                <FileText className="h-4 w-4" />
+              </span>
+              Proposal TA Terbaru
+            </CardTitle>
           </CardHeader>
           <CardContent>
             {recent.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">
+              <div className="text-center py-8 text-muted-foreground">
                 <FileText className="w-12 h-12 mx-auto mb-2 opacity-30" />
                 <p>Belum ada proposal TA</p>
-                <Link href="/proposals/new" className="text-blue-600 hover:underline text-sm mt-1 inline-block">
+                <Link href="/proposals/new" className="text-wbi-teal-dark hover:underline text-sm mt-1 inline-block font-medium">
                   Ajukan proposal TA pertama Anda
                 </Link>
               </div>
@@ -74,11 +77,11 @@ export default async function DashboardPage() {
                   <Link
                     key={p.id}
                     href={`/proposals/${p.id}`}
-                    className="flex items-center justify-between py-3 hover:bg-gray-50 px-2 rounded-lg transition-colors"
+                    className="flex items-center justify-between py-3 hover:bg-wbi-teal/5 px-2 rounded-xl transition-colors"
                   >
                     <div className="flex-1 min-w-0">
                       <p className="font-medium text-sm truncate">{p.title}</p>
-                      <p className="text-xs text-gray-400 mt-0.5">
+                      <p className="text-xs text-muted-foreground mt-0.5">
                         {p.pembimbing ? `Pembimbing: ${p.pembimbing.fullName}` : 'Belum ada pembimbing'} &bull;{' '}
                         {format(new Date(p.createdAt), 'd MMMM yyyy', { locale: id })}
                       </p>
@@ -117,12 +120,12 @@ export default async function DashboardPage() {
 
     return (
       <div className="space-y-6">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Dashboard Dosen</h1>
-          <p className="text-gray-500 mt-1">Selamat datang, {fullName || 'Dosen'}!</p>
-        </div>
+        <WelcomeBanner
+          title={`Selamat datang, ${fullName || 'Dosen'}!`}
+          subtitle="Pantau mahasiswa bimbingan dan penugasan penilaian Anda"
+        />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <StatsCard title="Mahasiswa Bimbingan" value={bimbinganProposals.length} icon={BookOpen} color="blue" />
           <StatsCard title="Penugasan Penguji" value={pengujiAssignments.length} icon={ClipboardList} color="amber" />
           <StatsCard title="Penilaian Selesai" value={pengujiAssignments.filter((a) => a.status === 'COMPLETED').length} icon={CheckCircle} color="green" />
@@ -131,11 +134,16 @@ export default async function DashboardPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card>
             <CardHeader>
-              <CardTitle className="text-base">Mahasiswa Bimbingan</CardTitle>
+              <CardTitle className="flex items-center gap-2 text-base">
+                <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-wbi-teal/10 text-wbi-teal-dark">
+                  <BookOpen className="h-4 w-4" />
+                </span>
+                Mahasiswa Bimbingan
+              </CardTitle>
             </CardHeader>
             <CardContent>
               {bimbinganProposals.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">
+                <div className="text-center py-8 text-muted-foreground">
                   <BookOpen className="w-12 h-12 mx-auto mb-2 opacity-30" />
                   <p>Belum ada mahasiswa bimbingan</p>
                 </div>
@@ -145,11 +153,11 @@ export default async function DashboardPage() {
                     <Link
                       key={p.id}
                       href={`/proposals/${p.id}`}
-                      className="flex items-center justify-between py-3 hover:bg-gray-50 px-2 rounded-lg transition-colors"
+                      className="flex items-center justify-between py-3 hover:bg-wbi-teal/5 px-2 rounded-xl transition-colors"
                     >
                       <div className="flex-1 min-w-0">
                         <p className="font-medium text-sm truncate">{p.title}</p>
-                        <p className="text-xs text-gray-400 mt-0.5">
+                        <p className="text-xs text-muted-foreground mt-0.5">
                           {p.submitter.fullName}{p.submitter.nim ? ` (${p.submitter.nim})` : ''}
                         </p>
                       </div>
@@ -163,12 +171,17 @@ export default async function DashboardPage() {
 
           <Card>
             <CardHeader>
-              <CardTitle className="text-base">Penilaian Menunggu</CardTitle>
+              <CardTitle className="flex items-center gap-2 text-base">
+                <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-wbi-gold/10 text-wbi-gold-dark">
+                  <ClipboardList className="h-4 w-4" />
+                </span>
+                Penilaian Menunggu
+              </CardTitle>
             </CardHeader>
             <CardContent>
               {pendingPenilaian.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">
-                  <CheckCircle className="w-12 h-12 mx-auto mb-2 opacity-30 text-green-400" />
+                <div className="text-center py-8 text-muted-foreground">
+                  <CheckCircle className="w-12 h-12 mx-auto mb-2 opacity-30 text-emerald-400" />
                   <p>Semua penilaian selesai!</p>
                 </div>
               ) : (
@@ -185,11 +198,11 @@ export default async function DashboardPage() {
                       <Link
                         key={a.id}
                         href={`/proposals/${a.proposalId}`}
-                        className="flex items-center justify-between py-3 hover:bg-gray-50 px-2 rounded-lg transition-colors"
+                        className="flex items-center justify-between py-3 hover:bg-wbi-teal/5 px-2 rounded-xl transition-colors"
                       >
                         <div className="flex-1 min-w-0">
                           <p className="font-medium text-sm truncate">{a.proposal.title}</p>
-                          <p className="text-xs text-gray-400 mt-0.5">{a.proposal.jurusan}</p>
+                          <p className="text-xs text-muted-foreground mt-0.5">{a.proposal.jurusan}</p>
                         </div>
                         {daysLeft !== null && (
                           <span
@@ -197,8 +210,8 @@ export default async function DashboardPage() {
                               daysLeft <= 3
                                 ? 'bg-red-100 text-red-600'
                                 : daysLeft <= 7
-                                ? 'bg-amber-100 text-amber-600'
-                                : 'bg-green-100 text-green-600'
+                                ? 'bg-wbi-gold/10 text-wbi-gold-dark'
+                                : 'bg-emerald-100 text-emerald-600'
                             }`}
                           >
                             {daysLeft <= 0 ? 'Terlambat' : `${daysLeft} hari lagi`}

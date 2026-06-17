@@ -7,6 +7,7 @@ import { id as idLocale } from 'date-fns/locale'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import StatusBadge from '@/components/proposals/StatusBadge'
+import WelcomeBanner from '@/components/dashboard/WelcomeBanner'
 import { ProposalStatus } from '@/types'
 import { ClipboardList } from 'lucide-react'
 
@@ -35,16 +36,13 @@ export default async function ReviewsPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Penilaian Proposal TA</h1>
-        <p className="text-gray-500 mt-1">Daftar proposal Tugas Akhir yang perlu Anda nilai</p>
-      </div>
+      <WelcomeBanner title="Penilaian Proposal TA" subtitle="Daftar proposal Tugas Akhir yang perlu Anda nilai" />
 
       {assignments.length === 0 ? (
         <Card>
           <CardContent className="py-12 text-center">
             <ClipboardList className="w-12 h-12 text-gray-200 mx-auto mb-3" />
-            <p className="text-gray-400">Belum ada proposal yang ditugaskan kepada Anda sebagai penguji</p>
+            <p className="text-muted-foreground">Belum ada proposal yang ditugaskan kepada Anda sebagai penguji</p>
           </CardContent>
         </Card>
       ) : (
@@ -58,18 +56,18 @@ export default async function ReviewsPage() {
               : null
 
             return (
-              <Card key={assignment.id} className="hover:shadow-md transition-shadow">
+              <Card key={assignment.id} className="transition-all duration-200 hover:shadow-md hover:shadow-wbi-teal/10 hover:-translate-y-0.5">
                 <CardContent className="p-5">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap mb-2">
                         <StatusBadge status={assignment.proposal.status as ProposalStatus} size="sm" />
                         {assignment.reviewForm ? (
-                          <span className="text-xs px-2 py-0.5 bg-green-100 text-green-700 rounded-full">
+                          <span className="text-xs px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded-full">
                             ✓ Penilaian Selesai
                           </span>
                         ) : (
-                          <span className="text-xs px-2 py-0.5 bg-amber-100 text-amber-700 rounded-full">
+                          <span className="text-xs px-2 py-0.5 bg-wbi-gold/10 text-wbi-gold-dark rounded-full">
                             Menunggu Penilaian
                           </span>
                         )}
@@ -88,12 +86,12 @@ export default async function ReviewsPage() {
                         )}
                       </div>
                       <h3 className="font-semibold text-sm line-clamp-2">{assignment.proposal.title}</h3>
-                      <p className="text-xs text-gray-400 mt-1">
+                      <p className="text-xs text-muted-foreground mt-1">
                         {assignment.proposal.jurusan} · Mahasiswa: {assignment.proposal.submitter.fullName}
                         {assignment.proposal.submitter.nim ? ` (${assignment.proposal.submitter.nim})` : ''}
                       </p>
                       {assignment.proposal.reviewDeadline && (
-                        <p className="text-xs text-gray-400 mt-0.5">
+                        <p className="text-xs text-muted-foreground mt-0.5">
                           Batas penilaian:{' '}
                           {format(new Date(assignment.proposal.reviewDeadline), 'd MMMM yyyy', {
                             locale: idLocale,
@@ -103,9 +101,8 @@ export default async function ReviewsPage() {
                     </div>
                     <Link href={`/proposals/${assignment.proposalId}`}>
                       <Button
-                        variant={assignment.reviewForm ? 'outline' : 'default'}
+                        variant={assignment.reviewForm ? 'outline' : 'gradient'}
                         size="sm"
-                        className={assignment.reviewForm ? '' : 'bg-blue-800 hover:bg-blue-900'}
                       >
                         {assignment.reviewForm ? 'Lihat Detail' : 'Mulai Penilaian'}
                       </Button>

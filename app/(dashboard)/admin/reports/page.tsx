@@ -1,6 +1,7 @@
 import { auth } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import ReportsPage from '@/components/admin/ReportsPage'
+import WelcomeBanner from '@/components/dashboard/WelcomeBanner'
 
 export default async function AdminReportsPage() {
   const session = await auth()
@@ -9,10 +10,7 @@ export default async function AdminReportsPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Laporan & Statistik</h1>
-        <p className="text-gray-500 mt-1">Analisis data proposal penelitian</p>
-      </div>
+      <WelcomeBanner title="Laporan & Statistik" subtitle="Analisis data proposal Tugas Akhir" />
       <ReportsPage />
     </div>
   )

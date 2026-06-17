@@ -45,9 +45,9 @@ function StarRating({
         >
           <Star
             className={cn(
-              'w-7 h-7 transition-colors',
+              'w-7 h-7 transition-all',
               (hovered || value) >= star
-                ? 'fill-amber-400 text-amber-400'
+                ? 'fill-wbi-gold text-wbi-gold scale-110'
                 : 'text-gray-200'
             )}
           />
@@ -134,12 +134,12 @@ export default function ReviewForm({ assignmentId }: ReviewFormProps) {
       </div>
 
       {avgScore && (
-        <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
+        <div className="flex items-center gap-3 p-3 bg-wbi-teal/5 border border-wbi-teal/15 rounded-xl">
           <div className="text-center">
-            <div className="text-2xl font-bold text-blue-700">{avgScore}</div>
-            <div className="text-xs text-blue-500">Rata-rata</div>
+            <div className="text-2xl font-bold text-wbi-teal-dark">{avgScore}</div>
+            <div className="text-xs text-wbi-teal-dark/70">Rata-rata</div>
           </div>
-          <div className="text-sm text-blue-700">Nilai rata-rata dari 4 kriteria penilaian</div>
+          <div className="text-sm text-wbi-forest">Nilai rata-rata dari 4 kriteria penilaian</div>
         </div>
       )}
 
@@ -172,14 +172,14 @@ export default function ReviewForm({ assignmentId }: ReviewFormProps) {
               <label
                 key={opt.value}
                 className={cn(
-                  'flex items-center justify-center p-3 border-2 rounded-lg cursor-pointer text-sm font-medium transition-colors',
+                  'flex items-center justify-center p-3 border-2 rounded-xl cursor-pointer text-sm font-medium transition-all',
                   selected
                     ? opt.color === 'green'
-                      ? 'border-green-500 bg-green-50 text-green-700'
+                      ? 'border-emerald-500 bg-emerald-50 text-emerald-700 scale-[1.02]'
                       : opt.color === 'amber'
-                      ? 'border-amber-500 bg-amber-50 text-amber-700'
-                      : 'border-red-500 bg-red-50 text-red-700'
-                    : 'border-gray-200 hover:border-gray-300'
+                      ? 'border-wbi-gold bg-wbi-gold/10 text-wbi-gold-dark scale-[1.02]'
+                      : 'border-red-500 bg-red-50 text-red-700 scale-[1.02]'
+                    : 'border-gray-200 hover:border-wbi-teal/40'
                 )}
               >
                 <input
@@ -200,7 +200,8 @@ export default function ReviewForm({ assignmentId }: ReviewFormProps) {
 
       <Button
         type="submit"
-        className="w-full bg-blue-800 hover:bg-blue-900"
+        variant="gradient"
+        className="w-full"
         disabled={isSubmitting}
       >
         {isSubmitting ? (
