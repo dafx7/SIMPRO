@@ -3,9 +3,10 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { cn } from '@/lib/utils'
 import { UserCheck, Loader2 } from 'lucide-react'
 
 interface Dosen {
@@ -63,12 +64,14 @@ export default function AssignPembimbingModal({ proposalId, currentPembimbingId 
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger>
-        <Button variant="gradient" className="w-full">
-          <UserCheck className="w-4 h-4 mr-2" />
-          Tugaskan Pembimbing
-        </Button>
-      </DialogTrigger>
+      <DialogTrigger
+        render={
+          <button className={cn(buttonVariants({ variant: 'gradient' }), 'w-full')}>
+            <UserCheck className="w-4 h-4 mr-2" />
+            Tugaskan Pembimbing
+          </button>
+        }
+      />
       <DialogContent className="max-w-md">
         <DialogHeader className="flex-row items-center gap-3 space-y-0">
           <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-wbi-teal/10 text-wbi-teal-dark">
@@ -87,10 +90,7 @@ export default function AssignPembimbingModal({ proposalId, currentPembimbingId 
             <SelectContent>
               {dosenList.map((d) => (
                 <SelectItem key={d.id} value={d.id}>
-                  <div>
-                    <span>{d.fullName}</span>
-                    {d.nidn && <span className="text-xs text-gray-400 ml-2">NIDN: {d.nidn}</span>}
-                  </div>
+                  {d.fullName}{d.nidn ? ` — ${d.nidn}` : ''}
                 </SelectItem>
               ))}
             </SelectContent>

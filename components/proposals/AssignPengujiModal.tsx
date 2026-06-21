@@ -159,8 +159,8 @@ export default function AssignPengujiModal({ proposalId, currentPengujiIds = [] 
         <Users className="mr-2 h-4 w-4" />
         Tugaskan Penguji
       </DialogTrigger>
-      <DialogContent className="max-w-md">
-        <DialogHeader className="flex-row items-center gap-3 space-y-0">
+      <DialogContent className="max-w-md max-h-[90vh] flex flex-col">
+        <DialogHeader className="flex-row items-center gap-3 space-y-0 shrink-0">
           <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-wbi-gold/10 text-wbi-gold-dark">
             <Users className="h-4 w-4" />
           </span>
@@ -172,7 +172,7 @@ export default function AssignPengujiModal({ proposalId, currentPengujiIds = [] 
           </div>
         </DialogHeader>
 
-        <div className="space-y-4 py-2">
+        <div className="space-y-4 py-2 overflow-y-auto flex-1 min-h-0 pr-1">
           {loadingRec && (
             <div className="flex items-center gap-2 text-xs text-gray-400">
               <Loader2 className="w-3 h-3 animate-spin" />
@@ -262,7 +262,7 @@ export default function AssignPengujiModal({ proposalId, currentPengujiIds = [] 
           </div>
         </div>
 
-        <DialogFooter>
+        <DialogFooter className="shrink-0 pt-2 border-t border-border">
           <Button variant="outline" onClick={() => setOpen(false)} disabled={isLoading}>
             Batal
           </Button>

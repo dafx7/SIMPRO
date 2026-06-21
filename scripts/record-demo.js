@@ -50,7 +50,7 @@ async function logout(page) {
 
   log('Memulai perekaman demo SIMPRO...')
 
-  const browser = await chromium.launch({ headless: false }) // headed for better recording
+  const browser = await chromium.launch({ headless: true })
   const context = await browser.newContext({
     viewport: { width: 1280, height: 720 },
     recordVideo: {
